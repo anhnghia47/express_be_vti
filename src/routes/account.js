@@ -15,10 +15,7 @@ router.post("/auth", function (req, res) {
           req.session.loggedin = true;
           req.session.username = username;
 
-          let comparePass = await bcrypt.compare(
-            req.body.password,
-            "a"
-          );
+          let comparePass = await bcrypt.compare(req.body.password, "a");
 
           console.log(comparePass);
 
@@ -35,8 +32,8 @@ router.post("/auth", function (req, res) {
 });
 
 router.get("/", (req, res) => {
-  let page = Number(req.query.page);
-  let limit = Number(req.query.limit);
+  let page = req.query.page;
+  let limit = req.query.limit;
   accountService.getAccounts({ page, limit }, async (err, result) => {
     if (err) {
       throw err;

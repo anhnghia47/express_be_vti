@@ -38,7 +38,7 @@ const accountService = {
       from Account as A
       inner join Department as D on D.DepartmentID = A.DepartmentID
       inner join Position as P on P.PositionID = A.PositionID
-      limit ${(page - 1) * limit}, ${limit} 
+      ${page? `limit ${(page - 1) * limit}, ${limit} `: ''}
       `,
       callback
     );
