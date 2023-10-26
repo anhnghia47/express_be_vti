@@ -6,12 +6,15 @@ var Account = function (account = {}) {
   this.FullName = account.fullName;
   this.DepartmentID = account.departmentId;
   this.PositionID = account.positionId;
+  if (account.password) {
+    this.password = account.password;
+  }
 };
 
 const accountService = {
   auth: (data, callback) => {
     connection.query(
-      "SELECT * FROM Account WHERE username = ? AND password = ?",
+      "SELECT * FROM Account WHERE username = ?",
       [data?.username, data?.password],
       callback
     );
@@ -38,7 +41,7 @@ const accountService = {
       from Account as A
       inner join Department as D on D.DepartmentID = A.DepartmentID
       inner join Position as P on P.PositionID = A.PositionID
-      ${page? `limit ${(page - 1) * limit}, ${limit} `: ''}
+      ${page ? `limit ${(page - 1) * limit}, ${limit} ` : ""}
       `,
       callback
     );
