@@ -130,6 +130,7 @@ router.put("/:id", async (req, res) => {
 });
 
 router.delete("/:id", (req, res) => {
+  res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
   accountService.deleteAccount(req.params.id, (err, result) => {
     if (err) {
       throw err;
