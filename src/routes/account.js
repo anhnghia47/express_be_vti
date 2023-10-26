@@ -36,6 +36,19 @@ router.post("/auth", function (req, res) {
   }
 });
 
+/**
+ * @swagger
+ * /accounts:
+ *  get:
+ *     summary: Get accounts
+ *     tags:
+ *     - Accounts
+ *     description: Get all account
+ *
+ *     responses:
+ *       200:
+ *         description: App is up and running
+ */
 router.get("/", (req, res) => {
   let page = req.query.page;
   let limit = req.query.limit;
@@ -55,6 +68,22 @@ router.get("/", (req, res) => {
   });
 });
 
+/**
+ * @swagger
+ * /accounts/{id}:
+ *  get:
+ *     summary: Get account detail by id
+ *     tags:
+ *     - Accounts
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *     description: Get account detail
+ *
+ *     responses:
+ *       200:
+ *         description: App is up and running
+ */
 router.get("/:id", (req, res) => {
   accountService.getAccountDetail(req.params.id, (err, result) => {
     if (err) {
@@ -65,6 +94,21 @@ router.get("/:id", (req, res) => {
   });
 });
 
+/**
+ * @swagger
+ * /accounts:
+ *  post:
+ *     summary: Create the account by id
+ *     tags:
+ *     - Accounts
+ *     requestBody:
+ *      required: true
+ *     description: Create account detail
+ *
+ *     responses:
+ *       200:
+ *         description: App is up and running
+ */
 router.post("/", async (req, res) => {
   const { email, fullName, username, departmentId, positionId, password } =
     req.body;
@@ -103,6 +147,24 @@ router.post("/", async (req, res) => {
   });
 });
 
+/**
+ * @swagger
+ * /accounts/{id}:
+ *  put:
+ *     summary: Edit the account by id
+ *     tags:
+ *     - Accounts
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *     requestBody:
+ *      required: true
+ *     description: Create account detail
+ *
+ *     responses:
+ *       200:
+ *         description: App is up and running
+ */
 router.put("/:id", async (req, res) => {
   const { password } = req.body;
   let newPassword;
@@ -129,6 +191,23 @@ router.put("/:id", async (req, res) => {
   });
 });
 
+/**
+ * @swagger
+ * /accounts/{id}:
+ *  delete:
+ *     summary: Remove the account by id
+ *     tags:
+ *     - Accounts
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *     requestBody:
+ *      required: true
+ *
+ *     responses:
+ *       200:
+ *         description: App is up and running
+ */
 router.delete("/:id", (req, res) => {
   res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
   accountService.deleteAccount(req.params.id, (err, result) => {

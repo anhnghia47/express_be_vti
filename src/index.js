@@ -3,6 +3,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
+const { swaggerDocs } = require("./services/swaggerService");
+
 require("dotenv").config();
 var path = require("path");
 const app = express();
@@ -42,4 +44,6 @@ app.use("/positions", positionRoute);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
+
+  swaggerDocs(app, port);
 });
