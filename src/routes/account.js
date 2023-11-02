@@ -5,6 +5,19 @@ const { accountService, Account } = require("../services/accountServices");
 const { hashPassword } = require("../utils/auth");
 const router = express.Router();
 
+/**
+ * @swagger
+ * /accounts/auth:
+ *  post:
+ *     summary: Login
+ *     tags:
+ *     - Accounts
+ *     description: Login
+ *
+ *     responses:
+ *       200:
+ *         description: App is up and running
+ */
 router.post("/auth", function (req, res) {
   let { username, password } = req.body;
   if (username && password) {
@@ -43,7 +56,7 @@ router.post("/auth", function (req, res) {
  *     summary: Get accounts
  *     tags:
  *     - Accounts
- *     description: Get all account
+ *     description: Get accounts
  *
  *     responses:
  *       200:
@@ -54,7 +67,7 @@ router.get("/", (req, res) => {
   let limit = req.query.limit;
   accountService.getAccounts({ page, limit }, async (err, result) => {
     if (err) {
-      throw err;
+      console.error(err);
     } else {
       res.send({
         data: result,
@@ -87,7 +100,7 @@ router.get("/", (req, res) => {
 router.get("/:id", (req, res) => {
   accountService.getAccountDetail(req.params.id, (err, result) => {
     if (err) {
-      throw err;
+      console.error(err);
     } else {
       res.send(result);
     }
@@ -134,11 +147,12 @@ router.post("/", async (req, res) => {
 
   accountService.createAccount(newAccount, (err, result) => {
     if (err) {
-      throw err;
+      console.error(err);
+      res.status(400).send("Error");
     } else {
       accountService.getAccountDetail(result?.insertId, (err, result) => {
         if (err) {
-          throw err;
+          console.error(err);
         } else {
           res.send(result);
         }
@@ -178,11 +192,12 @@ router.put("/:id", async (req, res) => {
   const accountId = req.params.id;
   accountService.updateAccount(accountId, updateAccount, (err, result) => {
     if (err) {
-      throw err;
+      console.error(err);
+      res.status(400).send("Error");
     } else {
       accountService.getAccountDetail(accountId, (err, result) => {
         if (err) {
-          throw err;
+          console.error(err);
         } else {
           res.send(result);
         }
@@ -209,10 +224,9 @@ router.put("/:id", async (req, res) => {
  *         description: App is up and running
  */
 router.delete("/:id", (req, res) => {
-  res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
   accountService.deleteAccount(req.params.id, (err, result) => {
     if (err) {
-      throw err;
+      console.error(err);
     } else {
       res.send({ msg: "Delete succesful" });
     }

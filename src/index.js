@@ -3,6 +3,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
+const morgan = require("morgan");
 const { swaggerDocs } = require("./services/swaggerService");
 
 require("dotenv").config();
@@ -37,10 +38,13 @@ app.get("/", (req, res) => {
 const accountRoute = require("./routes/account");
 const departmentRoute = require("./routes/department");
 const positionRoute = require("./routes/position");
+const productRoute = require("./routes/product");
 
+app.use(morgan("combined"));
 app.use("/accounts", accountRoute);
 app.use("/departments", departmentRoute);
 app.use("/positions", positionRoute);
+app.use("/products", productRoute);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
