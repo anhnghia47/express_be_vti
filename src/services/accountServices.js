@@ -39,9 +39,9 @@ const accountService = {
         A.DepartmentID as departmentId, D.DepartmentName as departmentName, A.PositionID as positionId, 
         P.PositionName as positionName, CreateDate as createDate
         from Account as A  
-      WHERE FullName LIKE '%${search}%'
-      inner join Department as D on D.DepartmentID = A.DepartmentID
-      inner join Position as P on P.PositionID = A.PositionID
+        inner join Department as D on D.DepartmentID = A.DepartmentID
+        inner join Position as P on P.PositionID = A.PositionID
+        where concat(FullName, Email, Username) LIKE '%${search}%'
       ${page ? `limit ${(page - 1) * limit}, ${limit} ` : ""} 
       `,
       callback

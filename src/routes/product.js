@@ -16,9 +16,8 @@ const router = express.Router();
  *         description: App is up and running
  */
 router.get("/", (req, res, next) => {
-  let page = req.query.page;
-  let limit = req.query.limit;
-  productService.getProducts({ page, limit }, async (err, result) => {
+  let { page, limit, search } = req.query;
+  productService.getProducts({ page, limit, search }, async (err, result) => {
     if (err) {
       next(err);
     } else {
@@ -104,12 +103,12 @@ router.post("/", async (req, res, next) => {
  */
 router.put("/:id", async (req, res, next) => {
   const accountId = req.params.id;
-  const updateAccount = new Product({...req.body, productId: accountId});
+  const updateAccount = new Product({ ...req.body, productId: accountId });
   productService.updateProduct(accountId, updateAccount, (err, result) => {
     if (err) {
       next(err);
     } else {
-      res.send({message: "Edit product detail"});
+      res.send({ message: "Edit product detail" });
     }
   });
 });
