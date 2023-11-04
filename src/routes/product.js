@@ -1,6 +1,4 @@
 const express = require("express");
-const { accountService, Account } = require("../services/accountServices");
-const { hashPassword } = require("../utils/auth");
 const { productService, Product } = require("../services/productServices");
 const router = express.Router();
 
@@ -17,12 +15,12 @@ const router = express.Router();
  *       200:
  *         description: App is up and running
  */
-router.get("/", (req, res) => {
+router.get("/", (req, res, next) => {
   let page = req.query.page;
   let limit = req.query.limit;
   productService.getProducts({ page, limit }, async (err, result) => {
     if (err) {
-      console.error(err)
+      next(err);
     } else {
       res.send({
         data: result,
@@ -51,7 +49,7 @@ router.get("/", (req, res) => {
  *       200:
  *         description: App is up and running
  */
-router.post("/", async (req, res) => {
+router.post("/", async (req, res, next) => {
   const { productName, productPrice, productInfo, categoryId, manufacturerId } =
     req.body;
   //handles null error
@@ -79,7 +77,7 @@ router.post("/", async (req, res) => {
   }
   productService.createProduct(newProduct, (err, result) => {
     if (err) {
-      console.error(err)
+      next(err);
     } else {
       res.send({ message: "Successful" });
     }
@@ -104,12 +102,12 @@ router.post("/", async (req, res) => {
  *       200:
  *         description: App is up and running
  */
-router.put("/:id", async (req, res) => {
+router.put("/:id", async (req, res, next) => {
   const accountId = req.params.id;
   const updateAccount = new Product({...req.body, productId: accountId});
   productService.updateProduct(accountId, updateAccount, (err, result) => {
     if (err) {
-      console.error(err)
+      next(err);
     } else {
       res.send({message: "Edit product detail"});
     }
@@ -133,10 +131,10 @@ router.put("/:id", async (req, res) => {
  *       200:
  *         description: App is up and running
  */
-router.delete("/:id", (req, res) => {
+router.delete("/:id", (req, res, next) => {
   productService.deleteProduct(req.params.id, (err, result) => {
     if (err) {
-      console.error(err)
+      next(err);
     } else {
       res.send({ msg: "Delete succesful" });
     }

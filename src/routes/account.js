@@ -18,11 +18,13 @@ const router = express.Router();
  *       200:
  *         description: App is up and running
  */
-router.post("/auth", function (req, res) {
+router.post("/auth", function (req, res, next) {
   let { username, password } = req.body;
   if (username && password) {
     accountService.auth({ username }, async (error, results, fields) => {
-      if (error) throw error;
+      if (error) {
+        next(err);
+      }
       if (results.length > 0) {
         req.session.loggedin = true;
         req.session.username = username;
@@ -62,23 +64,27 @@ router.post("/auth", function (req, res) {
  *       200:
  *         description: App is up and running
  */
-router.get("/", (req, res) => {
+router.get("/", (req, res, next) => {
   let page = req.query.page;
   let limit = req.query.limit;
-  accountService.getAccounts({ page, limit }, async (err, result) => {
-    if (err) {
-      console.error(err);
-    } else {
-      res.send({
-        data: result,
-        metadata: {
-          total: await accountService.getTotalAccount(),
-          page,
-          limit,
-        },
-      });
-    }
-  });
+  try {
+    accountService.getAccounts({ page, limit }, async (err, result) => {
+      if (err) {
+        next(err);
+      } else {
+        res.send({
+          data: result,
+          metadata: {
+            total: await accountService.getTotalAccount(),
+            page,
+            limit,
+          },
+        });
+      }
+    });
+  } catch (error) {
+    throw new Error("Hello error!");
+  }
 });
 
 /**
@@ -97,10 +103,10 @@ router.get("/", (req, res) => {
  *       200:
  *         description: App is up and running
  */
-router.get("/:id", (req, res) => {
+router.get("/:id", (req, res, next) => {
   accountService.getAccountDetail(req.params.id, (err, result) => {
     if (err) {
-      console.error(err);
+      next(err);
     } else {
       res.send(result);
     }
@@ -122,7 +128,7 @@ router.get("/:id", (req, res) => {
  *       200:
  *         description: App is up and running
  */
-router.post("/", async (req, res) => {
+router.post("/", async (req, res, next) => {
   const { email, fullName, username, departmentId, positionId, password } =
     req.body;
   //handles null error
@@ -147,7 +153,7 @@ router.post("/", async (req, res) => {
 
   accountService.createAccount(newAccount, (err, result) => {
     if (err) {
-      console.error(err);
+      next(err);
       res.status(400).send("Error");
     } else {
       accountService.getAccountDetail(result?.insertId, (err, result) => {
@@ -179,7 +185,7 @@ router.post("/", async (req, res) => {
  *       200:
  *         description: App is up and running
  */
-router.put("/:id", async (req, res) => {
+router.put("/:id", async (req, res, next) => {
   const { password } = req.body;
   let newPassword;
   if (password) {
@@ -192,7 +198,7 @@ router.put("/:id", async (req, res) => {
   const accountId = req.params.id;
   accountService.updateAccount(accountId, updateAccount, (err, result) => {
     if (err) {
-      console.error(err);
+      next(err);
       res.status(400).send("Error");
     } else {
       accountService.getAccountDetail(accountId, (err, result) => {
@@ -223,10 +229,10 @@ router.put("/:id", async (req, res) => {
  *       200:
  *         description: App is up and running
  */
-router.delete("/:id", (req, res) => {
+router.delete("/:id", (req, res, next) => {
   accountService.deleteAccount(req.params.id, (err, result) => {
     if (err) {
-      console.error(err);
+      next(err);
     } else {
       res.send({ msg: "Delete succesful" });
     }
