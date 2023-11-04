@@ -1,1 +1,1 @@
-select * from Account;
+select * from Account WHERE FullName LIKE 'name1%';

@@ -65,10 +65,10 @@ router.post("/auth", function (req, res, next) {
  *         description: App is up and running
  */
 router.get("/", (req, res, next) => {
-  let page = req.query.page;
-  let limit = req.query.limit;
+  let { page, limit, search } = req.query;
+
   try {
-    accountService.getAccounts({ page, limit }, async (err, result) => {
+    accountService.getAccounts({ page, limit, search }, async (err, result) => {
       if (err) {
         next(err);
       } else {
