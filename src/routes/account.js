@@ -73,7 +73,10 @@ router.get("/", (req, res, next) => {
         next(err);
       } else {
         res.send({
-          data: result,
+          data: result?.map((account) => ({
+            ...account,
+            isAdmin: account?.isAdmin === 1,
+          })),
           metadata: {
             total: await accountService.getTotalAccount(),
             page,

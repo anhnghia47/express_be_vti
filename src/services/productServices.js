@@ -13,7 +13,7 @@ var Product = function (product = {}) {
 };
 
 const productService = {
-  getProducts: ({ page, limit, search }, callback) => {
+  getProducts: ({ page, limit, search='' }, callback) => {
     connection.query(
       `
       select 

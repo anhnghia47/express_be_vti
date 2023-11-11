@@ -31,13 +31,13 @@ const accountService = {
         }
       );
     }),
-  getAccounts: ({ page, limit, search }, callback) => {
+  getAccounts: ({ page, limit, search = "" }, callback) => {
     connection.query(
       `
       select 
         AccountID as accountId, Email as email, Username as username, FullName as fullName, 
         A.DepartmentID as departmentId, D.DepartmentName as departmentName, A.PositionID as positionId, 
-        P.PositionName as positionName, CreateDate as createDate
+        P.PositionName as positionName, CreateDate as createDate, isAdmin
         from Account as A  
         inner join Department as D on D.DepartmentID = A.DepartmentID
         inner join Position as P on P.PositionID = A.PositionID
