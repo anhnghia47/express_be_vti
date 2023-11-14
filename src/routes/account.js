@@ -35,7 +35,13 @@ router.post("/auth", function (req, res, next) {
               expiresIn: "1h",
             });
             res.cookie("token", token);
-            res.send({ msg: "Logged in" });
+            accountService.getAccountDetail(user?.AccountID, (err, result) => {
+              if (err) {
+                console.error(err);
+              } else {
+                res.send(result[0]);
+              }
+            });
           } else {
             res
               .status(400)

@@ -35,6 +35,7 @@ CREATE TABLE `Account`(
 	`password` 				VARCHAR(800),
 	`status`				TINYINT DEFAULT 0,  -- 0: Not Active, 1: Active
     `PathImage` 			VARCHAR(50),
+    isAdmin				BOOLEAN DEFAULT FALSE,
     FOREIGN KEY(DepartmentID) REFERENCES Department(DepartmentID),
     FOREIGN KEY(PositionID) REFERENCES `Position`(PositionID)
 );
