@@ -26,7 +26,7 @@ router.get("/", (req, res, next) => {
         res.send({
           data: result,
           metadata: {
-            total: await productService.getTotalProduct(),
+            total: await productService.getTotalProduct(search, categoryId),
             page,
             limit,
           },

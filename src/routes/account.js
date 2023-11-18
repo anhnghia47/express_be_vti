@@ -117,7 +117,14 @@ router.get("/:id", (req, res, next) => {
     if (err) {
       next(err);
     } else {
-      res.send(result);
+      if (result?.length > 0) {
+        res.send({ data: result[0] });
+      } else {
+        res.status(400).send({
+          error: true,
+          message: "Account not found",
+        });
+      }
     }
   });
 });
@@ -152,14 +159,14 @@ router.post("/", async (req, res, next) => {
     var newAccount = new Account({ ...req.body, password: newPassword });
 
     const isEmailExisted = await accountService.checkEmailExists(email);
-    const isUsernameExisted = await accountService.checkUsernameExists(username);
+    const isUsernameExisted = await accountService.checkUsernameExists(
+      username
+    );
     if (isEmailExisted || isUsernameExisted) {
-      res
-        .status(400)
-        .send({
-          error: true,
-          message: `${isEmailExisted ? "Email" : "Username"} is existed`,
-        });
+      res.status(400).send({
+        error: true,
+        message: `${isEmailExisted ? "Email" : "Username"} is existed`,
+      });
       return;
     }
 
@@ -168,10 +175,12 @@ router.post("/", async (req, res, next) => {
         next(err);
         res.status(400).send("Error");
       } else {
+        console.log(result?.insertId);
         accountService.getAccountDetail(result?.insertId, (err, result) => {
           if (err) {
             console.error(err);
           } else {
+            console.log("first", result);
             res.send(result);
           }
         });

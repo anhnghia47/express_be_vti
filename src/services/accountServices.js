@@ -55,9 +55,9 @@ const accountService = {
         A.DepartmentID as departmentId, D.DepartmentName as departmentName, A.PositionID as positionId, 
         P.PositionName as positionName, CreateDate as createDate 
       from Account as A
-      inner join Department as D on D.DepartmentID = A.DepartmentID
-      inner join Position as P on P.PositionID = A.PositionID
-      where AccountID = '${id}'
+      left join Department as D on D.DepartmentID = A.DepartmentID
+      left join Position as P on P.PositionID = A.PositionID
+      where A.AccountID = '${id}'
       `,
       callback
     );

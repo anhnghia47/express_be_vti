@@ -32,10 +32,13 @@ const productService = {
       callback
     );
   },
-  getTotalProduct: () =>
+  getTotalProduct: (search, categoryId) =>
     new Promise((resolve, reject) => {
       connection.query(
-        `SELECT COUNT(ProductId) as total FROM Product`,
+        `SELECT COUNT(ProductId) as total FROM Product 
+          where concat(ProductName) LIKE '%${search}%' ${
+          categoryId ? `AND CategoryId = '${categoryId}'` : ""
+        }`,
         (error, results) => {
           if (error) {
             return reject(error);

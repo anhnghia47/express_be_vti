@@ -8,7 +8,6 @@ select AccountID as accountId,
   P.PositionName as positionName,
   CreateDate as createDate
 from Account as A
-  inner join Department as D on D.DepartmentID = A.DepartmentID
-  inner join Position as P on P.PositionID = A.PositionID
-LIMIT 0, 10
-WHERE FullName LIKE '%name1%'
+  left join Department as D on D.DepartmentID = A.DepartmentID
+  left join Position as P on P.PositionID = A.PositionID
+where A.AccountID = '13';
