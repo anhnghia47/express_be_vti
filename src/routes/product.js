@@ -16,21 +16,24 @@ const router = express.Router();
  *         description: App is up and running
  */
 router.get("/", (req, res, next) => {
-  let { page, limit, search } = req.query;
-  productService.getProducts({ page, limit, search }, async (err, result) => {
-    if (err) {
-      next(err);
-    } else {
-      res.send({
-        data: result,
-        metadata: {
-          total: await productService.getTotalProduct(),
-          page,
-          limit,
-        },
-      });
+  let { page, limit, search, categoryId } = req.query;
+  productService.getProducts(
+    { page, limit, search, categoryId },
+    async (err, result) => {
+      if (err) {
+        next(err);
+      } else {
+        res.send({
+          data: result,
+          metadata: {
+            total: await productService.getTotalProduct(),
+            page,
+            limit,
+          },
+        });
+      }
     }
-  });
+  );
 });
 
 /**

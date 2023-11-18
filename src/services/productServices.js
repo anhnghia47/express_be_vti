@@ -13,7 +13,7 @@ var Product = function (product = {}) {
 };
 
 const productService = {
-  getProducts: ({ page, limit, search='' }, callback) => {
+  getProducts: ({ page, limit, search = "", categoryId = null }, callback) => {
     connection.query(
       `
       select 
@@ -24,7 +24,9 @@ const productService = {
       from Product as A
       inner join Category as C on C.CategoryId = A.CategoryId
       inner join Manufacturer as M on M.ManufacturerId = A.ManufacturerId
-      where concat(ProductName) LIKE '%${search}%'
+      where concat(ProductName) LIKE '%${search}%' ${
+        categoryId ? `AND A.CategoryId = ${categoryId}` : ""
+      }
       ${page ? `limit ${(page - 1) * limit}, ${limit} ` : ""}
       `,
       callback

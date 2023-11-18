@@ -9,6 +9,7 @@ const accountRoute = require("./routes/account");
 const departmentRoute = require("./routes/department");
 const positionRoute = require("./routes/position");
 const productRoute = require("./routes/product");
+const productCategoryRoute = require("./routes/productCategory");
 const { swaggerDocs } = require("./services/swaggerService");
 
 require("dotenv").config();
@@ -53,6 +54,7 @@ app.use("/accounts", accountRoute);
 app.use("/departments", departmentRoute);
 app.use("/positions", positionRoute);
 app.use("/products", productRoute);
+app.use("/product-categories", productCategoryRoute);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
