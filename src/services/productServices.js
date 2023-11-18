@@ -18,7 +18,7 @@ const productService = {
       `
       select 
       ProductId as productId, ProductName as productName, ProductPrice as productPrice, ProductInfo as productInfo, 
-      ProductDetail as productDetail, RatingStar as ratingStar, ProductImageName as productImageName,
+      ProductDetail as productDetail, RatingStar as ratingStar, ProductImage as productImage,
       A.CategoryId as categoryId, A.ManufacturerId as manufacturerId,
       C.CategoryName as categoryName, M.ManufacturerName as manufacturerName
       from Product as A

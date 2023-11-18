@@ -77,6 +77,22 @@ const accountService = {
         }
       );
     }),
+
+  checkUsernameExists: (username) =>
+    new Promise((resolve, reject) => {
+      connection.query(
+        `
+        SELECT EXISTS(select * from Account
+        where Username = '${username}') as isExisted
+      `,
+        (error, results) => {
+          if (error) {
+            return reject(error);
+          }
+          return resolve(Boolean(results[0]?.isExisted));
+        }
+      );
+    }),
   createAccount: (newAccount, callback) => {
     connection.query(`INSERT INTO Account set ?`, newAccount, callback);
   },

@@ -138,42 +138,48 @@ router.get("/:id", (req, res, next) => {
  *         description: App is up and running
  */
 router.post("/", async (req, res, next) => {
-  const { email, fullName, username, departmentId, positionId, password } =
-    req.body;
+  const { email, fullName, username, password } = req.body;
   //handles null error
-  if (
-    !(email && fullName && username && departmentId && positionId && password)
-  ) {
+  if (!(email && fullName && username && password)) {
     res.status(400).send({
       error: true,
-      message:
-        "Email, username, fullname, departmentId, positionId, password are required",
+      message: "Email, username, fullname, password are required",
     });
     return;
   }
-  const newPassword = await hashPassword(password);
-  var newAccount = new Account({ ...req.body, password: newPassword });
+  try {
+    const newPassword = await hashPassword(password);
+    var newAccount = new Account({ ...req.body, password: newPassword });
 
-  const isExisted = await accountService.checkEmailExists(email);
-  if (isExisted) {
-    res.status(400).send({ error: true, message: "Email is existed" });
-    return;
-  }
-
-  accountService.createAccount(newAccount, (err, result) => {
-    if (err) {
-      next(err);
-      res.status(400).send("Error");
-    } else {
-      accountService.getAccountDetail(result?.insertId, (err, result) => {
-        if (err) {
-          console.error(err);
-        } else {
-          res.send(result);
-        }
-      });
+    const isEmailExisted = await accountService.checkEmailExists(email);
+    const isUsernameExisted = await accountService.checkUsernameExists(username);
+    if (isEmailExisted || isUsernameExisted) {
+      res
+        .status(400)
+        .send({
+          error: true,
+          message: `${isEmailExisted ? "Email" : "Username"} is existed`,
+        });
+      return;
     }
-  });
+
+    accountService.createAccount(newAccount, (err, result) => {
+      if (err) {
+        next(err);
+        res.status(400).send("Error");
+      } else {
+        accountService.getAccountDetail(result?.insertId, (err, result) => {
+          if (err) {
+            console.error(err);
+          } else {
+            res.send(result);
+          }
+        });
+      }
+    });
+  } catch (error) {
+    res.status(400).send({ msg: error });
+  }
 });
 
 /**

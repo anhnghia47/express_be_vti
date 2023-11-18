@@ -27,10 +27,10 @@ DROP TABLE IF EXISTS `Account`;
 CREATE TABLE `Account`(
 	AccountID				TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     Email					VARCHAR(50) NOT NULL UNIQUE KEY,
-    Username				VARCHAR(50) NOT NULL UNIQUE KEY,
+    Username				VARCHAR(50) NOT NULL UNIQUE,
     FullName				NVARCHAR(50) NOT NULL,
-    DepartmentID 			TINYINT UNSIGNED NOT NULL,
-    PositionID				TINYINT UNSIGNED NOT NULL,
+    DepartmentID 			TINYINT UNSIGNED,
+    PositionID				TINYINT UNSIGNED,
     CreateDate				DATETIME DEFAULT NOW(),
 	`password` 				VARCHAR(800),
 	`status`				TINYINT DEFAULT 0,  -- 0: Not Active, 1: Active
@@ -106,9 +106,9 @@ CREATE TABLE Product(
 	ProductInfo      VARCHAR(200) NOT NULL,
     ProductDetail    VARCHAR(500),
     RatingStar       TINYINT UNSIGNED, 
-	ProductImageName VARCHAR(50),
-    ManufacturerId   SMALLINT UNSIGNED NOT NULL,
-    CategoryId       SMALLINT UNSIGNED NOT NULL,
+	ProductImage     VARCHAR(50),
+    ManufacturerId   SMALLINT UNSIGNED,
+    CategoryId       SMALLINT UNSIGNED,
 
     FOREIGN KEY (ManufacturerId) REFERENCES Manufacturer(ManufacturerId),
     FOREIGN KEY (CategoryId)     REFERENCES Category(CategoryId)
@@ -130,7 +130,7 @@ VALUES
 						('Laptop'	);      
                         
 -- Add data Product
-INSERT INTO Product (ProductName, 					ProductPrice,		 ProductInfo,																 ProductDetail, 	RatingStar,  ProductImageName, ManufacturerId, CategoryId)			
+INSERT INTO Product (ProductName, 					ProductPrice,		 ProductInfo,																 ProductDetail, 	RatingStar,  ProductImage, ManufacturerId, CategoryId)			
 VALUES 				('Samsung Galaxy S22 Ultra 5G', '30.990.000₫',	'6.9 inches, Chip MediaTek Helio G85 (12nm) mạnh mẽ, Ram 4G, Pin 7000 mAh ',	'ProductDetail1',        5,	       'image1.jpg',         '1',       '1'),			
 				    ('Samsung Galaxy A52s 5G',      '9.000.000 ₫',	'Hiệu năng ưu việt, đa nhiệm- Chip xử lí Snapdragon 778G 5G và RAM 8GB',	    'ProductDetail2',        4,	       'image2.jpg',         '1',       '1'),
                     ('Samsung Galaxy A72',         '10.100.000 ₫',	'Màn hình Super AMOLED tần số quét 90Hz, độ sáng cao 800 nit.',	                'ProductDetail3',        3,	       'image3.jpg',         '1',       '1'),
