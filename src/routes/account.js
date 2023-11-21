@@ -39,7 +39,7 @@ router.post("/auth", function (req, res, next) {
               if (err) {
                 console.error(err);
               } else {
-                res.send(result[0]);
+                res.send({ data: result[0] });
               }
             });
           } else {
@@ -81,7 +81,6 @@ router.get("/", (req, res, next) => {
         res.send({
           data: result?.map((account) => ({
             ...account,
-            isAdmin: account?.isAdmin === 1,
           })),
           metadata: {
             total: await accountService.getTotalAccount(),
@@ -169,6 +168,8 @@ router.post("/", async (req, res, next) => {
       });
       return;
     }
+
+    console.log(req.body)
 
     accountService.createAccount(newAccount, (err, result) => {
       if (err) {

@@ -9,6 +9,7 @@ var Account = function (account = {}) {
   if (account.password) {
     this.password = account.password;
   }
+  this.isAdmin = account.isAdmin || 0;
 };
 
 const accountService = {
@@ -53,7 +54,7 @@ const accountService = {
       select 
         AccountID as accountId, Email as email, Username as username, FullName as fullName, 
         A.DepartmentID as departmentId, D.DepartmentName as departmentName, A.PositionID as positionId, 
-        P.PositionName as positionName, CreateDate as createDate 
+        P.PositionName as positionName, CreateDate as createDate, isAdmin 
       from Account as A
       left join Department as D on D.DepartmentID = A.DepartmentID
       left join Position as P on P.PositionID = A.PositionID

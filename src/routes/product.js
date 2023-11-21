@@ -3,6 +3,40 @@ const { productService, Product } = require("../services/productServices");
 const { imgPath } = require("../utils/file");
 const router = express.Router();
 
+
+/**
+ * @swagger
+ * /products/{id}:
+ *  get:
+ *     summary: Get account detail by id
+ *     tags:
+ *     - Accounts
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *     description: Get account detail
+ *
+ *     responses:
+ *       200:
+ *         description: App is up and running
+ */
+router.get("/:id", (req, res, next) => {
+  productService.getAccountDetail(req.params.id, (err, result) => {
+    if (err) {
+      next(err);
+    } else {
+      if (result?.length > 0) {
+        res.send({ data: result[0] });
+      } else {
+        res.status(400).send({
+          error: true,
+          message: "Account not found",
+        });
+      }
+    }
+  });
+});
+
 /**
  * @swagger
  * /products:

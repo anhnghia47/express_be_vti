@@ -50,6 +50,22 @@ const productService = {
       callback
     );
   },
+  getProductDetail: (id, callback) => {
+    connection.query(
+      `
+      select 
+      ProductId as productId, ProductName as productName, ProductPrice as productPrice, ProductInfo as productInfo, 
+      ProductDetail as productDetail, RatingStar as ratingStar, ProductImage as productImage,
+      A.CategoryId as categoryId, A.ManufacturerId as manufacturerId,
+      C.CategoryName as categoryName, M.ManufacturerName as manufacturerName
+      from Account as A
+      left join Department as D on D.DepartmentID = A.DepartmentID
+      left join Position as P on P.PositionID = A.PositionID
+      where A.AccountID = '${id}'
+      `,
+      callback
+    );
+  },
   getTotalProduct: (search = "", categoryId = null) =>
     new Promise((resolve, reject) => {
       connection.query(
