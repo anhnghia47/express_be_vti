@@ -36,21 +36,21 @@ CREATE TABLE `Account`(
     FOREIGN KEY(PositionID) REFERENCES `Position`(PositionID)
 );
 -- create table 4: Order
--- DROP TABLE IF EXISTS `Order`;
--- CREATE TABLE `Order`(
---     orderID TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
---     senderName VARCHAR(50) NOT NULL,
---     senderAddress VARCHAR(255) NOT NULL,
---     senderPhoneNumber VARCHAR(20) NOT NULL,
---     packageType VARCHAR(10) NOT NULL,
---     receiverName VARCHAR(50) NOT NULL,
---     receiverAddress VARCHAR(255) NOT NULL,
---     reveiverPhoneNumber NVARCHAR(50) NOT NULL,
---     createTime DATETIME DEFAULT NOW(),
---     shippingFee VARCHAR(50),
---     packageWeight VARCHAR(50),
---     employeeSignatureImage VARCHAR(50),
--- );
+DROP TABLE IF EXISTS `Order`;
+CREATE TABLE `Order`(
+    orderID TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    senderName VARCHAR(50) NOT NULL,
+    senderAddress VARCHAR(255) NOT NULL,
+    senderPhoneNumber VARCHAR(20) NOT NULL,
+    packageType VARCHAR(10) NOT NULL,
+    receiverName VARCHAR(50) NOT NULL,
+    receiverAddress VARCHAR(255) NOT NULL,
+    reveiverPhoneNumber NVARCHAR(50) NOT NULL,
+    createTime DATETIME DEFAULT NOW(),
+    shippingFee VARCHAR(50),
+    packageWeight VARCHAR(50),
+    employeeSignatureImage VARCHAR(50),
+);
 DROP TABLE IF EXISTS `Registration_User_Token`;
 CREATE TABLE IF NOT EXISTS `Registration_User_Token` (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -65,7 +65,7 @@ INSERT INTO Department(DepartmentName)
 VALUES (N'Marketing'),
     (N'Sale'),
     (N'Bảo vệ'),
-    (N 'Nhân sự'),
+    (N'Nhân sự'),
     (N'Kỹ thuật'),
     (N'Tài chính'),
     (N'Phó giám đốc'),
