@@ -1,5 +1,6 @@
 const express = require("express");
 const { productService, Product } = require("../services/productServices");
+const { imgPath } = require("../utils/file");
 const router = express.Router();
 
 /**
@@ -53,7 +54,6 @@ router.get("/", (req, res, next) => {
  */
 router.post("/", async (req, res, next) => {
   const { productName, productPrice, productInfo, categoryId } = req.body;
-  console.log(req.body);
   //handles null error
   if (!(productName && productPrice && productInfo && categoryId)) {
     res.status(400).send({
@@ -63,7 +63,10 @@ router.post("/", async (req, res, next) => {
     });
     return;
   }
-  var newProduct = new Product(req.body);
+  var newProduct = new Product({
+    ...req.body,
+    productImage: req.file?.filename ? imgPath(req.file.filename) : null,
+  });
   const isExisted = await productService.checkProductNameExists(productName);
   if (isExisted) {
     res.status(400).send({ error: true, message: "Product name is existed" });
@@ -97,9 +100,20 @@ router.post("/", async (req, res, next) => {
  *         description: App is up and running
  */
 router.put("/:id", async (req, res, next) => {
-  const accountId = req.params.id;
-  const updateAccount = new Product({ ...req.body, productId: accountId });
-  productService.updateProduct(accountId, updateAccount, (err, result) => {
+  const productId = req.params.id;
+
+  let isExisted = await productService.checkProductIDExists(productId);
+
+  if (!isExisted) {
+    res.status(404).send({ message: "Product not found" });
+    return;
+  }
+  const updateAccount = new Product({
+    ...req.body,
+    productId: productId,
+    productImage: req.file?.filename ? imgPath(req.file.filename) : null,
+  });
+  productService.updateProduct(productId, updateAccount, (err, result) => {
     if (err) {
       next(err);
     } else {

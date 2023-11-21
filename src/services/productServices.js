@@ -1,15 +1,33 @@
 const connection = require("../databases/mysql");
 
 var Product = function (product = {}) {
-  this.ProductId = product.productId;
-  this.ProductName = product.productName;
-  this.ProductPrice = product.productPrice;
-  this.ProductInfo = product.productInfo;
-  this.ProductDetail = product.productDetail;
-  this.RatingStar = product.ratingStar;
-  this.ProductImageName = product.productImageName;
-  this.ManufacturerId = product.manufacturerId;
-  this.CategoryId = product.categoryId;
+  if (product.productId) {
+    this.ProductId = product.productId;
+  }
+  if (product.productName) {
+    this.ProductName = product.productName;
+  }
+  if (product.productPrice) {
+    this.ProductPrice = product.productPrice;
+  }
+  if (product.productInfo) {
+    this.ProductInfo = product.productInfo;
+  }
+  if (product.productDetail) {
+    this.ProductDetail = product.productDetail;
+  }
+  if (product.ratingStar) {
+    this.RatingStar = product.ratingStar;
+  }
+  if (product.productImage) {
+    this.ProductImage = product.productImage;
+  }
+  if (product.manufacturerId) {
+    this.ManufacturerId = product.manufacturerId;
+  }
+  if (product.categoryId) {
+    this.CategoryId = product.categoryId;
+  }
 };
 
 const productService = {
@@ -22,8 +40,8 @@ const productService = {
       A.CategoryId as categoryId, A.ManufacturerId as manufacturerId,
       C.CategoryName as categoryName, M.ManufacturerName as manufacturerName
       from Product as A
-      inner join Category as C on C.CategoryId = A.CategoryId
-      inner join Manufacturer as M on M.ManufacturerId = A.ManufacturerId
+      left join Category as C on C.CategoryId = A.CategoryId
+      left join Manufacturer as M on M.ManufacturerId = A.ManufacturerId
       where concat(ProductName) LIKE '%${search}%' ${
         categoryId ? `AND A.CategoryId = ${categoryId}` : ""
       }
@@ -32,7 +50,7 @@ const productService = {
       callback
     );
   },
-  getTotalProduct: (search, categoryId) =>
+  getTotalProduct: (search = "", categoryId = null) =>
     new Promise((resolve, reject) => {
       connection.query(
         `SELECT COUNT(ProductId) as total FROM Product 
@@ -53,6 +71,21 @@ const productService = {
         `
         SELECT EXISTS(select * from Product
         where ProductName = '${name}') as isExisted
+      `,
+        (error, results) => {
+          if (error) {
+            return reject(error);
+          }
+          return resolve(Boolean(results[0]?.isExisted));
+        }
+      );
+    }),
+  checkProductIDExists: (id) =>
+    new Promise((resolve, reject) => {
+      connection.query(
+        `
+        SELECT EXISTS(select * from Product
+        where ProductId = '${id}') as isExisted
       `,
         (error, results) => {
           if (error) {

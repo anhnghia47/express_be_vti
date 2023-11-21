@@ -1,6 +1,5 @@
 const cors = require("cors");
 const express = require("express");
-const multer = require("multer");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
@@ -10,21 +9,16 @@ const departmentRoute = require("./routes/department");
 const positionRoute = require("./routes/position");
 const productRoute = require("./routes/product");
 const productCategoryRoute = require("./routes/productCategory");
+var path = require("path");
 const { swaggerDocs } = require("./services/swaggerService");
 
 require("dotenv").config();
-var path = require("path");
+const uploadMiddleware = require("./middleware/upload");
 const app = express();
 const port = 8080;
 
 app.set("views", path.join(__dirname, "/views"));
 app.set("view engine", "ejs");
-
-app.use(bodyParser.json());
-const upload = multer(); // Initialize multer
-app.use(upload.none());
-
-// parse application/json
 app.use(cookieParser());
 app.use(
   cors({
@@ -33,6 +27,8 @@ app.use(
     credentials: true,
   })
 );
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, "../public")));
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
@@ -40,20 +36,14 @@ app.use(
     saveUninitialized: true,
   })
 );
-
+app.use(morgan("combined"));
 app.get("/", (req, res) => {
   res.render("index");
 });
-app.use("/test", (req, res) => {
-  console.log(req.body);
-  res.status(400).send({ text: "abc" });
-});
-
-app.use(morgan("combined"));
 app.use("/accounts", accountRoute);
 app.use("/departments", departmentRoute);
 app.use("/positions", positionRoute);
-app.use("/products", productRoute);
+app.use("/products", uploadMiddleware("productImage"), productRoute);
 app.use("/product-categories", productCategoryRoute);
 
 app.listen(port, () => {
