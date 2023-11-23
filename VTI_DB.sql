@@ -36,8 +36,8 @@ CREATE TABLE `Account`(
     FOREIGN KEY(PositionID) REFERENCES `Position`(PositionID)
 );
 -- create table 4: Order
-DROP TABLE IF EXISTS `Order`;
-CREATE TABLE `Order`(
+DROP TABLE IF EXISTS `Shipping_Order`;
+CREATE TABLE `Shipping_Order`(
     orderID TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     senderName VARCHAR(50) NOT NULL,
     senderAddress VARCHAR(255) NOT NULL,
@@ -49,7 +49,7 @@ CREATE TABLE `Order`(
     createTime DATETIME DEFAULT NOW(),
     shippingFee VARCHAR(50),
     packageWeight VARCHAR(50),
-    employeeSignatureImage VARCHAR(50),
+    employeeSignatureImage VARCHAR(50)
 );
 DROP TABLE IF EXISTS `Registration_User_Token`;
 CREATE TABLE IF NOT EXISTS `Registration_User_Token` (
