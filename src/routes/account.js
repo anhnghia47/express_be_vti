@@ -182,15 +182,14 @@ router.post("/", async (req, res, next) => {
         next(err);
         res.status(400).send("Error");
       } else {
-        console.log(result?.insertId);
-        accountService.getAccountDetail(result?.insertId, (err, result) => {
-          if (err) {
-            console.error(err);
-          } else {
-            console.log("first", result);
-            res.send(result);
-          }
-        });
+        accountService
+          .getAccountDetail(result?.insertId)
+          .then((result) => {
+            res.send({ data: result });
+          })
+          .catch((err) => {
+            throw Error;
+          });
       }
     });
   } catch (error) {
@@ -232,13 +231,14 @@ router.put("/:id", async (req, res, next) => {
       next(err);
       res.status(400).send("Error");
     } else {
-      accountService.getAccountDetail(accountId, (err, result) => {
-        if (err) {
-          console.error(err);
-        } else {
-          res.send(result);
-        }
-      });
+      accountService
+        .getAccountDetail(accountId)
+        .then((result) => {
+          res.send({ data: result });
+        })
+        .catch((err) => {
+          throw Error;
+        });
     }
   });
 });
