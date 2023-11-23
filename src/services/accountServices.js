@@ -48,20 +48,27 @@ const accountService = {
       callback
     );
   },
-  getAccountDetail: (id, callback) => {
-    connection.query(
-      `
-      select 
-        AccountID as accountId, Email as email, Username as username, FullName as fullName, 
-        A.DepartmentID as departmentId, D.DepartmentName as departmentName, A.PositionID as positionId, 
-        P.PositionName as positionName, CreateDate as createDate, isAdmin 
-      from Account as A
-      left join Department as D on D.DepartmentID = A.DepartmentID
-      left join Position as P on P.PositionID = A.PositionID
-      where A.AccountID = '${id}'
-      `,
-      callback
-    );
+  getAccountDetail: (id) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        `
+        select 
+          AccountID as accountId, Email as email, Username as username, FullName as fullName, 
+          A.DepartmentID as departmentId, D.DepartmentName as departmentName, A.PositionID as positionId, 
+          P.PositionName as positionName, CreateDate as createDate, isAdmin 
+        from Account as A
+        left join Department as D on D.DepartmentID = A.DepartmentID
+        left join Position as P on P.PositionID = A.PositionID
+        where A.AccountID = '${id}'
+        `,
+        (error, results) => {
+          if (error) {
+            return reject(error);
+          }
+          return resolve(results[0]);
+        }
+      );
+    })
   },
   checkEmailExists: (email) =>
     new Promise((resolve, reject) => {

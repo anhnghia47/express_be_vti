@@ -1,8 +1,10 @@
+require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const { accountService, Account } = require("../services/accountServices");
-const { hashPassword } = require("../utils/auth");
+const { hashPassword, authorization } = require("../utils/auth");
+const { SESSION_SECRET } = require("../constants/schema");
 const router = express.Router();
 
 /**
@@ -31,17 +33,26 @@ router.post("/auth", function (req, res, next) {
         const user = results[0];
         bcrypt.compare(password, user.password, (err, result) => {
           if (result) {
-            const token = jwt.sign({ username }, "secrect_key", {
-              expiresIn: "1h",
-            });
-            res.cookie("token", token);
-            accountService.getAccountDetail(user?.AccountID, (err, result) => {
-              if (err) {
-                console.error(err);
-              } else {
-                res.send({ data: result[0] });
+            const token = jwt.sign(
+              { username, accountId: user["AccountID"] },
+              SESSION_SECRET,
+              {
+                expiresIn: "1h",
               }
-            });
+            );
+            res.cookie("token", token);
+            accountService
+              .getAccountDetail(user?.AccountID)
+              .then((result) => {
+                if (err) {
+                  console.error(err);
+                } else {
+                  res.send({ data: result });
+                }
+              })
+              .catch((err) => {
+                throw Error;
+              });
           } else {
             res
               .status(400)
@@ -111,21 +122,19 @@ router.get("/", (req, res, next) => {
  *       200:
  *         description: App is up and running
  */
-router.get("/:id", (req, res, next) => {
-  accountService.getAccountDetail(req.params.id, (err, result) => {
-    if (err) {
-      next(err);
-    } else {
-      if (result?.length > 0) {
-        res.send({ data: result[0] });
-      } else {
-        res.status(400).send({
-          error: true,
-          message: "Account not found",
-        });
-      }
-    }
-  });
+router.get("/profile", authorization, (req, res, next) => {
+  try {
+    accountService
+      .getAccountDetail(req?.userId)
+      .then((result) => {
+        res.send({ data: result });
+      })
+      .catch((err) => {
+        throw Error;
+      });
+  } catch (error) {
+    res.status(403).send({ message: "For hidden" });
+  }
 });
 
 /**
@@ -168,9 +177,6 @@ router.post("/", async (req, res, next) => {
       });
       return;
     }
-
-    console.log(req.body)
-
     accountService.createAccount(newAccount, (err, result) => {
       if (err) {
         next(err);
