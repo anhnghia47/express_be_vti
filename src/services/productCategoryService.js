@@ -11,6 +11,23 @@ var Category = function (category = {}) {
 };
 
 const categoryService = {
+  getCategoryDetail: (id) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        `
+          SELECT CategoryId as categoryId, CategoryName as categoryName
+          from Category
+          where CategoryId = '${id}'
+        `,
+        (error, results) => {
+          if (error) {
+            return reject(error);
+          }
+          return resolve(results[0]);
+        }
+      );
+    });
+  },
   getCategories: () =>
     new Promise((resolve, reject) => {
       connection.query(

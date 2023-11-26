@@ -243,7 +243,7 @@ VALUES (
         '6.9 inches, Chip MediaTek Helio G85 (12nm) mạnh mẽ, Ram 4G, Pin 7000 mAh ',
         'ProductDetail1',
         5,
-        'image1.jpg',
+        Null,
         '1',
         '1'
     ),
@@ -253,7 +253,7 @@ VALUES (
         'Hiệu năng ưu việt, đa nhiệm- Chip xử lí Snapdragon 778G 5G và RAM 8GB',
         'ProductDetail2',
         4,
-        'image2.jpg',
+        Null,
         '1',
         '1'
     ),
@@ -263,7 +263,7 @@ VALUES (
         'Màn hình Super AMOLED tần số quét 90Hz, độ sáng cao 800 nit.',
         'ProductDetail3',
         3,
-        'image3.jpg',
+        Null,
         '1',
         '1'
     ),
@@ -273,7 +273,7 @@ VALUES (
         'Hiệu năng mượt mà, ổn định - Chip A13, RAM 4GB',
         'ProductDetail4',
         4,
-        'image4.jpg',
+        Null,
         '2',
         '1'
     ),
@@ -283,7 +283,7 @@ VALUES (
         'Hiệu năng vượt trội - Chip Apple A15 Bionic mạnh mẽ, hỗ trợ mạng 5G',
         'ProductDetail5',
         5,
-        'image5.jpg',
+        Null,
         '2',
         '1'
     ),
@@ -293,7 +293,7 @@ VALUES (
         'Đỉnh cao công nghệ màn hình - Màn hình Liquid Retina, tần số quét 120Hz',
         'ProductDetail6',
         4,
-        'image6.jpg',
+        Null,
         '2',
         '2'
     ),
@@ -303,7 +303,7 @@ VALUES (
         'Thiết kế mỏng nhẹ, tinh tế - Thiết kế vuông vức, chỉ dày khoảng 7mm',
         'ProductDetail7',
         5,
-        'image7.jpg',
+        Null,
         '3',
         '2'
     ),
@@ -313,7 +313,7 @@ VALUES (
         'Xử lý đồ hoạ mượt mà - Chip M1',
         'ProductDetail8',
         5,
-        'image8.jpg',
+        Null,
         '2',
         '3'
     ),
@@ -323,7 +323,7 @@ VALUES (
         'Đa nhiệm tốt - Ram 8GB cho phép mở cùng lúc nhiều ứng dụng',
         'ProductDetail9',
         4,
-        'image9.jpg',
+        Null,
         '2',
         '3'
     );

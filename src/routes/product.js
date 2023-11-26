@@ -6,39 +6,6 @@ const router = express.Router();
 
 /**
  * @swagger
- * /products/{id}:
- *  get:
- *     summary: Get account detail by id
- *     tags:
- *     - Accounts
- *     parameters:
- *       - in: path
- *         name: id
- *     description: Get account detail
- *
- *     responses:
- *       200:
- *         description: App is up and running
- */
-router.get("/:id", (req, res, next) => {
-  productService.getAccountDetail(req.params.id, (err, result) => {
-    if (err) {
-      next(err);
-    } else {
-      if (result?.length > 0) {
-        res.send({ data: result[0] });
-      } else {
-        res.status(400).send({
-          error: true,
-          message: "Account not found",
-        });
-      }
-    }
-  });
-});
-
-/**
- * @swagger
  * /products:
  *  get:
  *     summary: Get Products
@@ -71,6 +38,48 @@ router.get("/", (req, res, next) => {
   );
 });
 
+
+/**
+ * @swagger
+ * /products/{id}:
+ *  get:
+ *     summary: Get the product by id
+ *     tags:
+ *     - Products
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *     requestBody:
+ *      required: true
+ *     description: Get product detail
+ *
+ *     responses:
+ *       200:
+ *         description: App is up and running
+ */
+router.get("/:id", async (req, res, next) => {
+  const productId = req.params.id;
+  try {
+    let isExisted = await productService.checkProductIDExists(productId);
+
+    if (!isExisted) {
+      res.status(404).send({ message: "Product not found" });
+      return;
+    }
+    productService
+      .getProductDetail(productId)
+      .then((result) => {
+        res.send({ data: result });
+      })
+      .catch((err) => {
+        throw Error;
+      });
+  } catch (error) {
+    res.status(404).send({ message: "Something went wrong" });
+  }
+});
+
+
 /**
  * @swagger
  * /products:
@@ -88,6 +97,7 @@ router.get("/", (req, res, next) => {
  */
 router.post("/", async (req, res, next) => {
   const { productName, productPrice, productInfo, categoryId } = req.body;
+  console.log(req.body);
   //handles null error
   if (!(productName && productPrice && productInfo && categoryId)) {
     res.status(400).send({

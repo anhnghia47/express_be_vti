@@ -7,7 +7,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /categories:
+ * /product-categories:
  *  get:
  *     summary: Get all categories
  *     tags:
@@ -28,7 +28,47 @@ router.get("/", async (req, res) => {
 
 /**
  * @swagger
- * /categories:
+ * /product-categories/{id}:
+ *  get:
+ *     summary: Get the category by id
+ *     tags:
+ *     - Categories
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *     requestBody:
+ *      required: true
+ *     description: Get category detail
+ *
+ *     responses:
+ *       200:
+ *         description: App is up and running
+ */
+router.get("/:id", async (req, res, next) => {
+  const categoryId = req.params.id;
+  try {
+    let isExisted = await categoryService.checkCategoryIdExists(categoryId);
+
+    if (!isExisted) {
+      res.status(404).send({ message: "Category not found" });
+      return;
+    }
+    categoryService
+      .getCategoryDetail(categoryId)
+      .then((result) => {
+        res.send({ data: result });
+      })
+      .catch((err) => {
+        throw Error;
+      });
+  } catch (error) {
+    res.status(404).send({ message: "Something went wrong" });
+  }
+});
+
+/**
+ * @swagger
+ * /product-categories:
  *  post:
  *     summary: create new category
  *     tags:
@@ -64,7 +104,7 @@ router.post("/", async (req, res) => {
 
 /**
  * @swagger
- * /categories/{id}:
+ * /product-categories/{id}:
  *  put:
  *     summary: Edit the category by id
  *     tags:
@@ -116,16 +156,13 @@ router.delete("/:id", async (req, res) => {
       res.status(404).send({ message: "Category not found" });
       return;
     }
-    await categoryService.deleteCategory(
-      categoryId,
-      (err, result) => {
-        if (err) {
-          next(err);
-        } else {
-          res.send({ msg: "Delete succesful" });
-        }
+    await categoryService.deleteCategory(categoryId, (err, result) => {
+      if (err) {
+        next(err);
+      } else {
+        res.send({ msg: "Delete succesful" });
       }
-    );
+    });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
