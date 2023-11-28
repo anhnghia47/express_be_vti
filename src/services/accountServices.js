@@ -32,7 +32,7 @@ const accountService = {
         }
       );
     }),
-  getAccounts: ({ page, limit, search = "" }, callback) => {
+  getAccounts: ({ page=1, limit=10, search = "" }, callback) => {
     connection.query(
       `
       select 
