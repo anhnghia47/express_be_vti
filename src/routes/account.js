@@ -82,7 +82,7 @@ router.post("/auth", function (req, res, next) {
  *         description: App is up and running
  */
 router.get("/", (req, res, next) => {
-  let { page = 1, limit = 10, search } = req.query;
+  let { page, limit, search } = req.query;
 
   try {
     accountService.getAccounts({ page, limit, search }, async (err, result) => {
@@ -90,11 +90,9 @@ router.get("/", (req, res, next) => {
         next(err);
       } else {
         res.send({
-          data: result?.map((account) => ({
-            ...account,
-          })),
+          data: result,
           metadata: {
-            total: await accountService.getTotalAccount(),
+            total: await accountService.getTotalAccount(search),
             page,
             limit,
           },

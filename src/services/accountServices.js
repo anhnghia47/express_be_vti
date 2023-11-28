@@ -20,10 +20,12 @@ const accountService = {
       callback
     );
   },
-  getTotalAccount: () =>
+  getTotalAccount: (search='') =>
     new Promise((resolve, reject) => {
       connection.query(
-        `SELECT COUNT(AccountID) as total FROM Account`,
+        `SELECT COUNT(AccountID) as total FROM Account        
+        where concat(FullName, Email, Username) LIKE '%${search}%'
+        `,
         (error, results) => {
           if (error) {
             return reject(error);
@@ -40,8 +42,8 @@ const accountService = {
         A.DepartmentID as departmentId, D.DepartmentName as departmentName, A.PositionID as positionId, 
         P.PositionName as positionName, CreateDate as createDate, isAdmin
         from Account as A  
-        inner join Department as D on D.DepartmentID = A.DepartmentID
-        inner join Position as P on P.PositionID = A.PositionID
+        left join Department as D on D.DepartmentID = A.DepartmentID
+        left join Position as P on P.PositionID = A.PositionID
         where concat(FullName, Email, Username) LIKE '%${search}%'
       ${page ? `limit ${(page - 1) * limit}, ${limit} ` : ""} 
       `,
