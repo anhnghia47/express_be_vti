@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "start": "nodemon src/index.js"
+    "start": "nodemon src/index.js",
+    "regen-database": "mysql -u root -p"
   },
   "name": "vti_be",
   "version": "1.0.0",
