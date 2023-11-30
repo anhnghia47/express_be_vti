@@ -1,8 +1,8 @@
 const express = require("express");
 const { productService, Product } = require("../services/productServices");
 const { imgPath } = require("../utils/file");
+const { productReviewService } = require("../services/productReviewService");
 const router = express.Router();
-
 
 /**
  * @swagger
@@ -38,7 +38,6 @@ router.get("/", (req, res, next) => {
   );
 });
 
-
 /**
  * @swagger
  * /products/{id}:
@@ -66,19 +65,20 @@ router.get("/:id", async (req, res, next) => {
       res.status(404).send({ message: "Product not found" });
       return;
     }
+    let avgReview = await productReviewService.getProductReview(productId);
     productService
       .getProductDetail(productId)
       .then((result) => {
-        res.send({ data: result });
+        res.send({ data: { ...result, ratingStar: avgReview } });
       })
       .catch((err) => {
         throw Error;
       });
   } catch (error) {
+    console.log(error);
     res.status(404).send({ message: "Something went wrong" });
   }
 });
-
 
 /**
  * @swagger

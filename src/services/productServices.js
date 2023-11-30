@@ -35,18 +35,21 @@ const productService = {
     connection.query(
       `
       select 
-      ProductId as productId, ProductName as productName, ProductPrice as productPrice, ProductInfo as productInfo, 
-      ProductDetail as productDetail, RatingStar as ratingStar, ProductImage as productImage,
-      A.CategoryId as categoryId, A.ManufacturerId as manufacturerId,
-      C.CategoryName as categoryName, M.ManufacturerName as manufacturerName
+        A.ProductId as productId, ProductName as productName, ProductPrice as productPrice, ProductInfo as productInfo, 
+        ProductDetail as productDetail, ProductImage as productImage,
+        A.CategoryId as categoryId, A.ManufacturerId as manufacturerId,
+        C.CategoryName as categoryName, M.ManufacturerName as manufacturerName,
+        COALESCE(AVG(R.rating), 0) AS ratingStar
+
       from Product as A
-      left join Category as C on C.CategoryId = A.CategoryId
-      left join Manufacturer as M on M.ManufacturerId = A.ManufacturerId
-      where concat(ProductName) LIKE '%${search}%' ${
+        left join Category as C on C.CategoryId = A.CategoryId
+        left join Manufacturer as M on M.ManufacturerId = A.ManufacturerId
+        LEFT JOIN Product_Review as R ON A.ProductId = R.ProductId
+
+      GROUP BY A.ProductId
+      HAVING concat(ProductName) LIKE '%${search}%' ${
         categoryId ? `AND A.CategoryId = ${categoryId}` : ""
-      }
-      ${page ? `limit ${(page - 1) * limit}, ${limit} ` : ""}
-      `,
+      } ${page ? `limit ${(page - 1) * limit}, ${limit} ` : ""} `,
       callback
     );
   },

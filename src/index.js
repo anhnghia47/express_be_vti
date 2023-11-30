@@ -10,6 +10,7 @@ const positionRoute = require("./routes/position");
 const productRoute = require("./routes/product");
 const productCategoryRoute = require("./routes/productCategory");
 const shippingOrderRoute = require("./routes/shippingOrder");
+const productReviewRoute = require("./routes/productReview");
 var path = require("path");
 const { swaggerDocs } = require("./services/swaggerService");
 
@@ -49,6 +50,7 @@ app.use("/positions", positionRoute);
 app.use("/products", uploadMiddleware("productImage"), productRoute);
 app.use("/product-categories", productCategoryRoute);
 app.use("/shipping-orders", shippingOrderRoute);
+app.use("/product-review", productReviewRoute);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

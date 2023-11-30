@@ -51,6 +51,40 @@ CREATE TABLE `Shipping_Order`(
     packageWeight VARCHAR(50),
     employeeSignatureImage VARCHAR(50)
 );
+DROP TABLE IF EXISTS Manufacturer;
+CREATE TABLE Manufacturer(
+    ManufacturerId SMALLINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    ManufacturerName ENUM('SAMSUNG', 'APPLE', 'XIAOMI', 'OPPO') NOT NULL UNIQUE KEY
+);
+DROP TABLE IF EXISTS Category;
+CREATE TABLE Category(
+    CategoryId SMALLINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    CategoryName VARCHAR(30) NOT NULL UNIQUE KEY
+);
+DROP TABLE IF EXISTS Product;
+CREATE TABLE Product(
+    ProductId SMALLINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    ProductName VARCHAR(50) NOT NULL UNIQUE KEY,
+    ProductPrice VARCHAR(50) NOT NULL,
+    ProductInfo VARCHAR(200) NOT NULL,
+    ProductDetail VARCHAR(500),
+    RatingStar TINYINT UNSIGNED,
+    ProductImage VARCHAR(50),
+    ManufacturerId SMALLINT UNSIGNED,
+    CategoryId SMALLINT UNSIGNED,
+    FOREIGN KEY (ManufacturerId) REFERENCES Manufacturer(ManufacturerId),
+    FOREIGN KEY (CategoryId) REFERENCES Category(CategoryId)
+);
+-- create table 5: Posittion
+DROP TABLE IF EXISTS Product_Review;
+CREATE TABLE Product_Review (
+    reviewId TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    ProductId SMALLINT UNSIGNED,
+    AccountID TINYINT UNSIGNED,
+    rating SMALLINT NOT NULL,
+    FOREIGN KEY (ProductId) REFERENCES Product(ProductId),
+    FOREIGN KEY (AccountID) REFERENCES Account(AccountID)
+);
 DROP TABLE IF EXISTS `Registration_User_Token`;
 CREATE TABLE IF NOT EXISTS `Registration_User_Token` (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -189,30 +223,6 @@ VALUES (
         '$2a$10$W2neF9.6Agi6kAKVq8q3fec5dHW8KUA.b0VSIGdIZyUravfLpyIFi',
         0
     );
-DROP TABLE IF EXISTS Manufacturer;
-CREATE TABLE Manufacturer(
-    ManufacturerId SMALLINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    ManufacturerName ENUM('SAMSUNG', 'APPLE', 'XIAOMI', 'OPPO') NOT NULL UNIQUE KEY
-);
-DROP TABLE IF EXISTS Category;
-CREATE TABLE Category(
-    CategoryId SMALLINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    CategoryName VARCHAR(30) NOT NULL UNIQUE KEY
-);
-DROP TABLE IF EXISTS Product;
-CREATE TABLE Product(
-    ProductId SMALLINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    ProductName VARCHAR(50) NOT NULL UNIQUE KEY,
-    ProductPrice VARCHAR(50) NOT NULL,
-    ProductInfo VARCHAR(200) NOT NULL,
-    ProductDetail VARCHAR(500),
-    RatingStar TINYINT UNSIGNED,
-    ProductImage VARCHAR(50),
-    ManufacturerId SMALLINT UNSIGNED,
-    CategoryId SMALLINT UNSIGNED,
-    FOREIGN KEY (ManufacturerId) REFERENCES Manufacturer(ManufacturerId),
-    FOREIGN KEY (CategoryId) REFERENCES Category(CategoryId)
-);
 /*============================== INSERT DATABASE =======================================*/
 /*======================================================================================*/
 -- Add data Manufacturer
