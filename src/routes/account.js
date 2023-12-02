@@ -128,6 +128,7 @@ router.get("/profile", authorization, (req, res, next) => {
         res.send({ data: result });
       })
       .catch((err) => {
+        console.log(err)
         throw Error;
       });
   } catch (error) {

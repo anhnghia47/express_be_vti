@@ -96,14 +96,14 @@ router.get("/:id", async (req, res, next) => {
  *         description: App is up and running
  */
 router.post("/", async (req, res, next) => {
-  const { productName, productPrice, productInfo, categoryId } = req.body;
+  const { productName, productPrice, productInfo } = req.body;
   console.log(req.body);
   //handles null error
-  if (!(productName && productPrice && productInfo && categoryId)) {
+  if (!(productName && productPrice && productInfo)) {
     res.status(400).send({
       error: true,
       message:
-        "ProductName, productPrice, productInfo, categoryId are required",
+        "ProductName, productPrice, productInfo are required",
     });
     return;
   }
