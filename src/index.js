@@ -16,7 +16,6 @@ const { swaggerDocs } = require("./services/swaggerService");
 
 require("dotenv").config();
 const uploadMiddleware = require("./middleware/upload");
-const { shippingOrderService } = require("./services/shippingOrderService");
 const app = express();
 const port = 8080;
 
@@ -25,7 +24,7 @@ app.set("view engine", "ejs");
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "*",
+    origin: ["http://localhost:3333"],
     methods: ["POST", "GET", "OPTIONS", "DELETE", "PUT"],
     credentials: true,
   })
@@ -51,6 +50,12 @@ app.use("/products", uploadMiddleware("productImage"), productRoute);
 app.use("/product-categories", productCategoryRoute);
 app.use("/shipping-orders", shippingOrderRoute);
 app.use("/product-review", productReviewRoute);
+app.use((err, req, res, next) => {
+  console.error(err.stack); // Log the error
+  res.status(500).send({
+    message: "Something went wrong!",
+  });
+});
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

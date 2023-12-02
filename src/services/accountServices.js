@@ -20,7 +20,7 @@ const accountService = {
       callback
     );
   },
-  getTotalAccount: (search='') =>
+  getTotalAccount: (search = "") =>
     new Promise((resolve, reject) => {
       connection.query(
         `SELECT COUNT(AccountID) as total FROM Account        
@@ -34,7 +34,7 @@ const accountService = {
         }
       );
     }),
-  getAccounts: ({ page=1, limit=10, search = "" }, callback) => {
+  getAccounts: ({ page = 1, limit = 10, search = "" }, callback) => {
     connection.query(
       `
       select 
@@ -50,8 +50,8 @@ const accountService = {
       callback
     );
   },
-  getAccountDetail: (id) => {
-    return new Promise((resolve, reject) => {
+  getAccountDetail: (id) =>
+    new Promise((resolve, reject) => {
       connection.query(
         `
         select 
@@ -65,13 +65,14 @@ const accountService = {
         `,
         (error, results) => {
           if (error) {
+            console.log(error);
             return reject(error);
           }
+          console.log(results);
           return resolve(results[0]);
         }
       );
-    })
-  },
+    }),
   checkEmailExists: (email) =>
     new Promise((resolve, reject) => {
       connection.query(

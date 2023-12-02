@@ -18,10 +18,12 @@ const hashPassword = async (password) => {
 
 const authorization = (req, res, next) => {
   const token = req.cookies.token;
+  console.log("token", token);
   if (!token) {
-    throw Error;
+    throw Error("For hidden");
   }
   try {
+    console.log("vai");
     const data = jwt.verify(token, SESSION_SECRET);
     if (data.accountId) {
       req.userId = data.accountId;
@@ -29,7 +31,8 @@ const authorization = (req, res, next) => {
       throw Error;
     }
     return next();
-  } catch {
+  } catch (err) {
+    console.log(err, "neh");
     return res.status(403).send({ message: "For hidden" });
   }
 };
