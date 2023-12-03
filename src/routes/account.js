@@ -128,9 +128,24 @@ router.get("/profile", authorization, (req, res, next) => {
         res.send({ data: result });
       })
       .catch((err) => {
-        console.log(err)
+        console.log(err);
         throw Error;
       });
+  } catch (error) {
+    res.status(403).send({ message: "For hidden" });
+  }
+});
+
+router.post("/logout", authorization, (req, res, next) => {
+  try {
+    req.session.destroy((err) => {
+      if (err) {
+        console.error("Error destroying session:", err);
+        return res.status(500).json({ message: "Logout failed" });
+      }
+      res.clearCookie("token"); // Clear session cookie if used
+      res.json({ message: "Logged out successfully" });
+    });
   } catch (error) {
     res.status(403).send({ message: "For hidden" });
   }

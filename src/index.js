@@ -16,6 +16,7 @@ const { swaggerDocs } = require("./services/swaggerService");
 
 require("dotenv").config();
 const uploadMiddleware = require("./middleware/upload");
+const { CORS_URLS } = require("./constants/schema");
 const app = express();
 const port = 8080;
 
@@ -24,7 +25,7 @@ app.set("view engine", "ejs");
 app.use(cookieParser());
 app.use(
   cors({
-    origin: ["http://localhost:3333"],
+    origin: CORS_URLS,
     methods: ["POST", "GET", "OPTIONS", "DELETE", "PUT"],
     credentials: true,
   })
