@@ -148,7 +148,7 @@ router.put("/:id", async (req, res, next) => {
 });
 
 // Delete a product category by ID
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", async (req, res, next) => {
   try {
     const categoryId = req.params.id;
     let isExisted = await categoryService.checkCategoryIdExists(categoryId);
