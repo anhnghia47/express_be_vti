@@ -49,8 +49,18 @@ CREATE TABLE `Shipping_Order`(
     createTime DATETIME DEFAULT NOW(),
     shippingFee VARCHAR(50),
     packageWeight VARCHAR(50),
-    employeeSignatureImage VARCHAR(50)
+    employeeSignatureImage VARCHAR(50),
+    branchId TINYINT UNSIGNED,
+    FOREIGN KEY(branchId) REFERENCES Shipping_Branch(branchId)
 );
+
+DROP TABLE IF EXISTS `Shipping_Branch`;
+CREATE TABLE `Shipping_Branch`(
+    branchId TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    brnachName VARCHAR(50) NOT NULL,
+    branchAddress VARCHAR(255) NOT NULL
+);
+
 DROP TABLE IF EXISTS Manufacturer;
 CREATE TABLE Manufacturer(
     ManufacturerId SMALLINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -99,7 +109,7 @@ INSERT INTO Department(DepartmentName)
 VALUES (N'Marketing'),
     (N'Sale'),
     (N'Bảo vệ'),
-    (N 'Nhân sự'),
+    (N'Nhân sự'),
     (N'Kỹ thuật'),
     (N'Tài chính'),
     (N'Phó giám đốc'),
@@ -127,7 +137,7 @@ VALUES (
         'Email1@gmail.com',
         'Username1',
         'Fullname1',
-        '5',
+        '2',
         '1',
         '2020-03-05',
         '$2a$10$W2neF9.6Agi6kAKVq8q3fec5dHW8KUA.b0VSIGdIZyUravfLpyIFi',
@@ -194,5 +204,5 @@ VALUES (
         4,
         Null,
         '2',
-        '3'
+        '2'
     );
