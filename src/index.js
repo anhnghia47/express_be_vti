@@ -11,8 +11,9 @@ const productRoute = require("./routes/product");
 const productCategoryRoute = require("./routes/productCategory");
 const shippingOrderRoute = require("./routes/shippingOrder");
 const productReviewRoute = require("./routes/productReview");
-var path = require("path");
+const shippingBranchRoute = require("./routes/shippingBranch");
 const { swaggerDocs } = require("./services/swaggerService");
+var path = require("path");
 
 require("dotenv").config();
 const uploadMiddleware = require("./middleware/upload");
@@ -51,6 +52,7 @@ app.use("/products", uploadMiddleware("productImage"), productRoute);
 app.use("/product-categories", productCategoryRoute);
 app.use("/shipping-orders", shippingOrderRoute);
 app.use("/product-review", productReviewRoute);
+app.use("/shipping-branchs", shippingBranchRoute);
 app.use((err, req, res, next) => {
   console.error(err.stack); // Log the error
   res.status(500).send({

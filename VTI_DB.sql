@@ -35,6 +35,12 @@ CREATE TABLE `Account`(
     FOREIGN KEY(DepartmentID) REFERENCES Department(DepartmentID),
     FOREIGN KEY(PositionID) REFERENCES `Position`(PositionID)
 );
+DROP TABLE IF EXISTS `Shipping_Branch`;
+CREATE TABLE `Shipping_Branch`(
+    branchId TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    branchName VARCHAR(50) NOT NULL,
+    branchAddress VARCHAR(255) NOT NULL
+);
 -- create table 4: Order
 DROP TABLE IF EXISTS `Shipping_Order`;
 CREATE TABLE `Shipping_Order`(
@@ -53,14 +59,6 @@ CREATE TABLE `Shipping_Order`(
     branchId TINYINT UNSIGNED,
     FOREIGN KEY(branchId) REFERENCES Shipping_Branch(branchId)
 );
-
-DROP TABLE IF EXISTS `Shipping_Branch`;
-CREATE TABLE `Shipping_Branch`(
-    branchId TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    brnachName VARCHAR(50) NOT NULL,
-    branchAddress VARCHAR(255) NOT NULL
-);
-
 DROP TABLE IF EXISTS Manufacturer;
 CREATE TABLE Manufacturer(
     ManufacturerId SMALLINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,

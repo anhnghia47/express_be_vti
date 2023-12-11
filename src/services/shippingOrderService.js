@@ -11,10 +11,15 @@ var ShippingOrder = function (shippingOrder = {}) {
 };
 
 const shippingOrderService = {
-  getShippingOrders: () =>
+  getShippingOrders: ({ branchId = undefined }) =>
     new Promise((resolve, reject) => {
       connection.query(
-        `SELECT * FROM Shipping_Order`,
+        `
+          SELECT *, branchName FROM Shipping_Order O
+          left join Shipping_Branch B on B.branchId = O.branchId 
+          group by O.orderID
+          ${branchId ? `having O.branchId=${branchId}` : ""}
+        `,
         (error, results) => {
           if (error) {
             return reject(error);

@@ -20,7 +20,10 @@ const router = express.Router();
  *         description: App is up and running
  */
 router.get("/", async (req, res) => {
-  const shippingOrders = await shippingOrderService.getShippingOrders();
+  let { branchId } = req.query;
+  const shippingOrders = await shippingOrderService.getShippingOrders({
+    branchId,
+  });
 
   res.send({
     data: shippingOrders,
@@ -70,10 +73,11 @@ router.post("/", async (req, res, next) => {
     // const order = new ShippingOrder(req.body);
     shippingOrderService.createShippingOrder(req.body, (err, result) => {
       if (err) {
-        next(err);
+        console.log(err);
+        res.status(400).json({ message: "Error" });
       } else {
+        res.send({ message: "Successful" });
       }
-      res.send({ message: "Successful" });
     });
   } catch (err) {
     res.status(400).json({ message: err.message });
