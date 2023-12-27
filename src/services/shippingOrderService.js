@@ -11,6 +11,23 @@ var ShippingOrder = function (shippingOrder = {}) {
 };
 
 const shippingOrderService = {
+  getShippingOrderDetail: ({ orderId = undefined }) =>
+  new Promise((resolve, reject) => {
+    connection.query(
+      `
+        SELECT *, branchName FROM Shipping_Order O
+        left join Shipping_Branch B on B.branchId = O.branchId 
+        group by O.orderID
+        having O.orderId=${orderId}
+      `,
+      (error, results) => {
+        if (error) {
+          return reject(error);
+        }
+        return resolve(results[0]);
+      }
+    );
+  }),
   getShippingOrders: ({ branchId = undefined }) =>
     new Promise((resolve, reject) => {
       connection.query(

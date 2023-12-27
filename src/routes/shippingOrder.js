@@ -6,19 +6,24 @@ const {
 const { shippingOrderService } = require("../services/shippingOrderService");
 const router = express.Router();
 
-/**
- * @swagger
- * /shipping-order:
- *  get:
- *     summary: Get all shipping-order
- *     tags:
- *     - shipping-order
- *     description: Get all shipping-order
- *
- *     responses:
- *       200:
- *         description: App is up and running
- */
+router.get("/:id", async (req, res) => {
+  const orderId = req.params.id;
+  const shippingOrderDetail = await shippingOrderService.getShippingOrderDetail(
+    {
+      orderId,
+    }
+  );
+
+  if (shippingOrderDetail?.orderID) {
+    res.send({
+      data: shippingOrderDetail,
+    });
+  } else {
+    res.status(404).send({ message: "ShippingOrder not found" });
+    return;
+  }
+});
+
 router.get("/", async (req, res) => {
   let { branchId } = req.query;
   const shippingOrders = await shippingOrderService.getShippingOrders({
