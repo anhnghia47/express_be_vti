@@ -12,6 +12,7 @@ const productCategoryRoute = require("./routes/productCategory");
 const shippingOrderRoute = require("./routes/shippingOrder");
 const productReviewRoute = require("./routes/productReview");
 const shippingBranchRoute = require("./routes/shippingBranch");
+const orderRoute = require("./routes/order");
 const { swaggerDocs } = require("./services/swaggerService");
 var path = require("path");
 
@@ -53,6 +54,7 @@ app.use("/product-categories", productCategoryRoute);
 app.use("/shipping-orders", shippingOrderRoute);
 app.use("/product-review", productReviewRoute);
 app.use("/shipping-branchs", shippingBranchRoute);
+app.use("/orders", orderRoute);
 app.use((err, req, res, next) => {
   console.error(err.stack); // Log the error
   res.status(500).send({

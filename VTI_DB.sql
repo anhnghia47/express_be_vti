@@ -41,7 +41,7 @@ CREATE TABLE `Shipping_Branch`(
     branchName VARCHAR(50) NOT NULL,
     branchAddress VARCHAR(255) NOT NULL
 );
--- create table 4: Order
+-- create table 4: Shipping Order
 DROP TABLE IF EXISTS `Shipping_Order`;
 CREATE TABLE `Shipping_Order`(
     orderID TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -59,11 +59,13 @@ CREATE TABLE `Shipping_Order`(
     branchId TINYINT UNSIGNED,
     FOREIGN KEY(branchId) REFERENCES Shipping_Branch(branchId)
 );
+
 DROP TABLE IF EXISTS Manufacturer;
 CREATE TABLE Manufacturer(
     ManufacturerId SMALLINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     ManufacturerName ENUM('SAMSUNG', 'APPLE', 'XIAOMI', 'OPPO') NOT NULL UNIQUE KEY
 );
+
 DROP TABLE IF EXISTS Category;
 CREATE TABLE Category(
     CategoryId SMALLINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -83,6 +85,34 @@ CREATE TABLE Product(
     FOREIGN KEY (ManufacturerId) REFERENCES Manufacturer(ManufacturerId),
     FOREIGN KEY (CategoryId) REFERENCES Category(CategoryId)
 );
+
+-- Create Order
+DROP TABLE IF EXISTS `orders`;
+CREATE TABLE `orders`(
+    order_id TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    customer_fullname VARCHAR(255) NOT NULL,
+    shipping_address VARCHAR(255) NOT NULL,
+    zip_code VARCHAR(20),
+    customer_phone VARCHAR(10) NOT NULL,
+    customer_email VARCHAR(50) NOT NULL,
+    shipping_status VARCHAR(50) NOT NULL,
+    order_status VARCHAR(50) NOT NULL,
+    payment_method VARCHAR(50) NOT NULL,
+    order_note VARCHAR(255),
+    createTime DATETIME DEFAULT NOW()
+);
+
+-- Create Order Items
+DROP TABLE IF EXISTS `order_items`;
+CREATE TABLE `order_items`(
+    order_id TINYINT UNSIGNED,
+    product_id SMALLINT UNSIGNED,
+    quantity INT,
+    FOREIGN KEY(order_id) REFERENCES orders(order_id),
+    FOREIGN KEY(product_id) REFERENCES Product(ProductId)
+);
+
+
 -- create table 5: Posittion
 DROP TABLE IF EXISTS Product_Review;
 CREATE TABLE Product_Review (
