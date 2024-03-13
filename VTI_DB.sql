@@ -82,6 +82,7 @@ CREATE TABLE Product(
     ProductImage VARCHAR(50),
     ManufacturerId SMALLINT UNSIGNED,
     CategoryId SMALLINT UNSIGNED,
+    exp_date DATETIME,
     FOREIGN KEY (ManufacturerId) REFERENCES Manufacturer(ManufacturerId),
     FOREIGN KEY (CategoryId) REFERENCES Category(CategoryId)
 );

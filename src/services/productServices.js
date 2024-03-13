@@ -39,7 +39,7 @@ const productService = {
         ProductDetail as productDetail, ProductImage as productImage,
         A.CategoryId as categoryId, A.ManufacturerId as manufacturerId,
         C.CategoryName as categoryName, M.ManufacturerName as manufacturerName,
-        COALESCE(AVG(R.rating), 0) AS ratingStar
+        COALESCE(AVG(R.rating), 0) AS ratingStar, A.exp_date
 
       from Product as A
         left join Category as C on C.CategoryId = A.CategoryId
